@@ -18,6 +18,7 @@ const std::string kVersionFilename{"/version"};
 const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
 
+std::vector<std::string> string_split(std::string in, char delim);
 // System
 float MemoryUtilization();
 long UpTime();
@@ -26,6 +27,7 @@ int TotalProcesses();
 int RunningProcesses();
 std::string OperatingSystem();
 std::string Kernel();
+
 
 // CPU
 enum CPUStates {
@@ -40,7 +42,7 @@ enum CPUStates {
   kGuest_,
   kGuestNice_
 };
-std::vector<std::string> CpuUtilization();
+std::vector<long> CpuUtilization();
 long Jiffies();
 long ActiveJiffies();
 long ActiveJiffies(int pid);
