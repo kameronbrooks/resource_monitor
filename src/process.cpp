@@ -19,46 +19,42 @@ Process::Process(int pid) {
     _previousCpuJiffies = 0;
 }
 
-// TODO: Return this process's ID
 int Process::Pid() { 
     return _pid; 
 }
 
-// TODO: Return this process's CPU utilization
-float Process::CpuUtilization() { 
-    auto proc_jiffies = LinuxParser::ActiveJiffies(_pid);
-    auto system_jiffies = LinuxParser::ActiveJiffies() - LinuxParser::UpTime(_pid);
+float Process::CpuUtilization() {
 
-    _cpuUtilization = ((float)(proc_jiffies - _previousJiffies)) / ((float)(system_jiffies - _previousCpuJiffies));
-    
-    _previousCpuJiffies = system_jiffies;
+    auto proc_jiffies = LinuxParser::ActiveJiffies(_pid);
+    auto system_jiffies = LinuxParser::Jiffies();
+
+    auto proc_delta = proc_jiffies - _previousJiffies;
+    auto system_delta = system_jiffies - _previousCpuJiffies;
+
     _previousJiffies = proc_jiffies;
+    _previousCpuJiffies = system_jiffies;
+
+    _cpuUtilization = (float)proc_delta / (float)system_delta;
 
     return _cpuUtilization;
 }
 
-// TODO: Return the command that generated this process
 string Process::Command() { 
     return LinuxParser::Command(_pid); 
 }
 
-// TODO: Return this process's memory utilization
 string Process::Ram() { 
     return LinuxParser::Ram(_pid);
 }
 
-// TODO: Return the user (name) that generated this process
 string Process::User() { 
     return LinuxParser::User(_pid);
 }
 
-// TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { 
     return LinuxParser::UpTime(_pid);
 }
 
-// TODO: Overload the "less than" comparison operator for Process objects
-// REMOVE: [[maybe_unused]] once you define the function
 bool Process::operator<(Process const& a) const { 
     return _cpuUtilization > a._cpuUtilization;
 }

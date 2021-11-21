@@ -19,6 +19,38 @@ const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
 
 std::vector<std::string> string_split(std::string in, char delim);
+
+template<class T>
+bool search_kvp(std::string const &filename, std::string const & key, T& val) {
+  std::string line, k;
+
+  std::ifstream filestream(filename);
+  if(!filestream.is_open())
+    return false;
+  
+  while(std::getline(filestream, line)) {
+    std::stringstream sstream(line);
+    sstream >> k;
+    if(k == key) {
+      sstream >> val;
+      return true;
+    }
+  }
+  return false;
+}
+template<class T>
+bool get_file_val(std::string const &filename, T& val) {
+  std::string line;
+
+  std::ifstream filestream(filename);
+  if(!filestream.is_open())
+    return false;
+  std::getline(filestream, line);
+  std::stringstream sstream(line);
+  sstream >> val;
+  return true;
+  
+}
 // System
 float MemoryUtilization();
 long UpTime();
