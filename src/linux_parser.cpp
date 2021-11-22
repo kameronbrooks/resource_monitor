@@ -204,8 +204,20 @@ string LinuxParser::Ram(int pid) {
   std::string ramKB = "";
   // Previous reviewer suggested that VmRSS would give better results than VmSize
   search_kvp<std::string>(file, "VmRSS:", ramKB);
-  int mb = std::stoi(ramKB) / 1024;
-  return std::to_string(mb);
+  // I was not getting the error mentioned in the feeback
+  // I think this should fix the issue though
+  // I assume that it was because ramKB could have been blank
+  // I added a try/catch just incase that is wrong to catch other exceptions
+  if(ramKB.size() < 1)
+    return "";
+  try {
+    int mb = std::stoi(ramKB) / 1024;
+    return std::to_string(mb);
+  }
+  catch(...) {
+    return "";
+  }
+  
 }
 
 

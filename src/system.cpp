@@ -16,16 +16,20 @@ using std::vector;
 
 
 System::System() {
-    for(auto pid: LinuxParser::Pids()) {
-        processes_.emplace_back(pid);
-    }
+    
 }
 
 
 Processor& System::Cpu() { return cpu_; }
 
 
-vector<Process>& System::Processes() { return processes_; }
+vector<Process>& System::Processes() { 
+    processes_.clear();
+    for(auto pid: LinuxParser::Pids()) {
+        processes_.emplace_back(pid);
+    }
+    return processes_; 
+}
 
 
 std::string System::Kernel() { return LinuxParser::Kernel(); }
