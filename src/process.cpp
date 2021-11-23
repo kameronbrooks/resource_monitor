@@ -23,6 +23,10 @@ int Process::Pid() {
     return _pid; 
 }
 
+bool Process::IsValid() {
+    return Command() != "" && Ram() != "";
+}
+
 float Process::CpuUtilization() {
 
     auto proc_jiffies = LinuxParser::ActiveJiffies(_pid);

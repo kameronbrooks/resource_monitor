@@ -24,10 +24,25 @@ Processor& System::Cpu() { return cpu_; }
 
 
 vector<Process>& System::Processes() { 
-    processes_.clear();
+    std::vector<Process> temp;
     for(auto pid: LinuxParser::Pids()) {
-        processes_.emplace_back(pid);
+        bool found = false;
+        for(auto& proc: processes_) {
+            if(proc.Pid() == pid) {
+                if(proc.IsValid())
+                    temp.emplace_back(proc);
+                found = true;
+                break;
+            }
+        }
+        if(!found) {
+            Process proc(pid);
+            if(proc.IsValid())
+                temp.emplace_back(pid);
+        }
     }
+    std::sort(temp.begin(), temp.end());
+    processes_ = temp;
     return processes_; 
 }
 
